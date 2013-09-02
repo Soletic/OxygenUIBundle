@@ -26,6 +26,24 @@ Vous devez activer le bundle dans l'application :
        );
    }
 
+
+Les différents thèmes
+---------------------
+
+Formulaire
+++++++++++
+
+Pour afficher les formulaires dans un style pré-défini s'appuyant sur Bootstrap Twitter, vous devez ajouter
+dans le fichier de configuration de l'application (config.yml) :
+
+.. code-block:: yaml
+
+   twig:
+      form:
+         resources:
+            - 'OxygenUIBundle::forms.html.twig'
+
+
 Cas d'une application hébergée sur GitHub
 -----------------------------------------
 
