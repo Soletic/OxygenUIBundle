@@ -1,0 +1,72 @@
+{# ------------- GENERIC ----------- #}
+{% block widget_attributes %}
+{% spaceless %}
+	{% if not ('class' in attr) %}
+		{% set attr = attr|merge({'class': 'form-control'}) %}
+	{% else %}
+		{% for attrname, attrvalue in attr if attrname == 'class' %}
+		{% set attr = attr|merge({'class': (attrvalue~' form-control')}) %}
+		{% endfor %}
+	{% endif %}
+    id="{{ id }}" name="{{ full_name }}"{% if read_only %} readonly="readonly"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if pattern %} pattern="{{ pattern }}"{% endif %}
+    {% for attrname, attrvalue in attr %}{% if attrname in ['placeholder', 'title'] %}{{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}" {% else %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}
+{% endspaceless %}
+{% endblock widget_attributes %}
+
+{% block form_row %}
+{% spaceless %}
+    <div class="form-group">
+        {{ form_label(form) }}
+        {{ form_errors(form) }}
+        {{ form_widget(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block form_label %}
+{% spaceless %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    {% if (plaintext is defined and plaintext)  %}
+    {{ label|trans({}, translation_domain) }}
+    {% else %}
+    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+    	{{ label|trans({}, translation_domain) }}
+    	{% if required %}
+		<span class="input-required" title="{{ 'label.required'|trans({}, 'OxygenUIForms') }}">*</span>
+		{% endif %}
+    </label>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_label %}
+
+{% block errors_list %}{% spaceless %}
+	<ul class="form-errors-list">
+        {% for error in errors %}
+            <li>{{
+                error.messagePluralization is null
+                    ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                    : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+            }}</li>
+        {% endfor %}
+    </ul>
+{% endspaceless %}{% endblock %}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+	    {% if form.vars.attr is defined and form.vars.attr.error is defined and form.vars.attr.error == 'small' %}
+	    <span class="form-error label label-danger glyphicon glyphicon-warning-sign" data-trigger="hover" data-placement="top" data-toggle="popover" data-html="true" data-content="{{ block('errors_list')|e }}"></span>
+	    {% else %}
+	    <div><div class="form-error label label-danger">{{ block('errors_list') }}</div></div>
+		{% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}

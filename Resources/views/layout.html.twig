@@ -27,7 +27,9 @@
         {% endblock %}
     </head>
     <body>
+    {% block body %}
     
+    {% block navbar %}
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -47,10 +49,11 @@
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
     </div><!-- /.navbar -->
+    {% endblock navbar %}
 
     <div class="container">
-
       <div class="row row-offcanvas row-offcanvas-right">
+      	{% block main %}
         <div class="col-xs-12 col-sm-9">
           <p class="pull-right visible-xs">
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
@@ -92,7 +95,8 @@
             </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
-
+        {% endblock main %}
+		{% block sidebar %}
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
           <div class="well sidebar-nav">
             <ul class="nav">
@@ -110,16 +114,20 @@
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
+        {% endblock %}
       </div><!--/row-->
 
-      <hr>
-
+      
+	  {% block footer %}
+	  <hr>
       <footer>
         <p>&copy; Company 2013</p>
       </footer>
+      {% endblock footer %}
 
     </div><!--/.container-->
     
+    {% endblock %}
     <!-- Javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
